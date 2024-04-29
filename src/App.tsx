@@ -1,5 +1,4 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 
 function InfoComponent({ title, paragraph1, paragraph2, image_src, image_alt } : {title: string, paragraph1: string, paragraph2: string, image_src: string, image_alt: string}) {
@@ -30,8 +29,16 @@ function CountingButton() {
   const [count, setCount] = useState(0);
 
   function handleClick() {
-    setCount(count + 1);
+    const newCount = count + 1;
+    setCount(newCount);
+    localStorage.setItem("buttonClickCount", newCount.toString());
   }
+
+  useEffect(() => {
+    const storedCount = localStorage.getItem("buttonClickCount");
+    console.log("initialising button count");
+    setCount(Number(storedCount) || 0);
+  }, []);
 
   return (
     <button onClick={handleClick}>Clicked {count} times</button>

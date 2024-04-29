@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext, createContext } from 'react';
 import './App.css';
 
-function InfoComponent({ title, paragraph1, paragraph2, image_src, image_alt, buttonCount }: { title: string, paragraph1: string, paragraph2: string, image_src: string, image_alt: string, buttonCount: number }) {
+const ButtonCountContext = createContext(0);
+
+function InfoComponent({ title, paragraph1, paragraph2, image_src, image_alt }: { title: string, paragraph1: string, paragraph2: string, image_src: string, image_alt: string }) {
+  const buttonCount = useContext(ButtonCountContext);
   return (
     <div className='App-intro'>
       <h1>{title}</h1>
@@ -13,7 +16,7 @@ function InfoComponent({ title, paragraph1, paragraph2, image_src, image_alt, bu
   );
 }
 
-function NasaInfo({ buttonCount }: { buttonCount: number}) {
+function NasaInfo() {
   const title = "The National Aeronautics and Space Administration";
   const p1 = "NASA explores the unknown in air and space, innovates for the benefit of humanity, and inspires the world through discovery.";
   const p2 = `At its 20 centers and facilities across the country – and the only National Laboratory in space – NASA studies Earth,
@@ -24,14 +27,15 @@ function NasaInfo({ buttonCount }: { buttonCount: number}) {
   return (
     <div>
       Component 3
-      <InfoComponent title={title} paragraph1={p1} paragraph2={p2} image_src={img} image_alt={img_alt} buttonCount={ buttonCount } />
+      <InfoComponent title={title} paragraph1={p1} paragraph2={p2} image_src={img} image_alt={img_alt} />
     </div>
   );
 }
 
-function CountingButton({ count, onClickHandler }: {count: number, onClickHandler: any}) {
+function CountingButton({ onClickHandler }: { onClickHandler: any }) {
+  const buttonCount = useContext(ButtonCountContext);
   return (
-    <button onClick={onClickHandler}>Clicked {count} times</button>
+    <button onClick={onClickHandler}>Clicked {buttonCount} times</button>
   );
 }
 
@@ -53,8 +57,10 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <CountingButton count={count} onClickHandler={handleButtonClick} />
-        <NasaInfo buttonCount={count} />
+        <ButtonCountContext.Provider value={count}>
+          <CountingButton onClickHandler={handleButtonClick} />
+          <NasaInfo />
+        </ButtonCountContext.Provider>
       </header>
     </div>
   );

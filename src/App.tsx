@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState } from 'react';
 import './App.css';
 
 function InfoComponent({ title, paragraph1, paragraph2, image_src, image_alt } : {title: string, paragraph1: string, paragraph2: string, image_src: string, image_alt: string}) {
@@ -25,11 +26,24 @@ function NasaInfo() {
   );
 }
 
+function CountingButton() {
+  const [count, setCount] = useState(0);
+
+  function handleClick() {
+    setCount(count + 1);
+  }
+
+  return (
+    <button onClick={handleClick}>Clicked {count} times</button>
+  );
+}
+
 function App() {
   return (
     <div className="App">
       <header className="App-header">
         <NasaInfo />
+        <CountingButton/>
       </header>
     </div>
   );

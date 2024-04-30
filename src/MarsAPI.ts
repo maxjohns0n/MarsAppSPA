@@ -11,4 +11,10 @@ async function getRoverNames(): Promise<string[]> {
     return rovers.data.rovers.map((rover: { name: string }) => rover.name);
 }
 
-export { getRoverNames }
+async function getRoverPhotoUrls(roverName: string): Promise<string[]> {
+    console.log(`Fetching photos for ${roverName}`);
+    const photos = await makeRequest(`rovers/${roverName}/photos/fhaz`);
+    return photos.data.photos.map((photo: {img_src: string}) => photo.img_src);
+}
+
+export { getRoverNames, getRoverPhotoUrls }

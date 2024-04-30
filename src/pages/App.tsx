@@ -1,11 +1,10 @@
 import React from 'react';
 import { Outlet, createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './App.css';
-import Navbar from './components/Navbar';
+import Navbar from '../components/Navbar';
 import { Container } from 'react-bootstrap';
-import RoverPhotos from './pages/RoverPhotos';
-import { loader as roverNamesLoader } from './components/RoverSearchForm';
-import PhotoGallery from './components/PhotoGallery';
+import RoverPhotos from './RoverPhotos';
+import { getRoverNames } from '../MarsAPI';
 
 function PageLayout() {
   return (
@@ -35,13 +34,7 @@ const router = createBrowserRouter([
       {
         path: "rover-photos",
         element: <RoverPhotos />,
-        loader: roverNamesLoader,
-        children: [
-          {
-            path: ":roverName",
-            element: <PhotoGallery />
-          }
-        ]
+        loader: getRoverNames
       }
     ]
   }

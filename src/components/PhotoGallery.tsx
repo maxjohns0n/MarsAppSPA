@@ -1,20 +1,22 @@
 import { useEffect, useState } from "react";
-import { getRoverPhotoUrls } from "../MarsAPI";
+import { getRoverPhotos, RoverPhotoResponse } from "../MarsAPI";
+import Photo from "./Photo";
 
 function PhotoGallery({ currentRoverName }: { currentRoverName: string }) {
-    const [photoUrls, setPhotoUrls] = useState([] as string[]);
+    const [photoData, setPhotoData] = useState([] as RoverPhotoResponse[]);
 
     useEffect(() => {
-        async function fetchUrls() {
-            setPhotoUrls(await getRoverPhotoUrls(currentRoverName));
-        }
-        fetchUrls();
+        (async function () {
+            setPhotoData(await getRoverPhotos(currentRoverName));
+        })();
     }, [currentRoverName]);
 
     return (
-        <>
-            {photoUrls.map((url) => <img src={url} key={"img_"+url} alt="alt text" />)}
-        </>
+        <div>
+            {photoData.map((photo) => (
+                <Photo src={photo.img_src} key={photo.id.toString()} alt="alt text" />
+            ))}
+        </div>
     )
 }
 

@@ -4,6 +4,8 @@ import './index.css';
 import App from './App';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+document.documentElement.dataset.bsTheme = "dark";
+
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );

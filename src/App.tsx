@@ -1,13 +1,19 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
+import { Outlet, createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './App.css';
-import Navbar from './Navbar';
+import Navbar from './components/Navbar';
+import { Container } from 'react-bootstrap';
+import RoverPhotos from './pages/RoverPhotos';
+import { loader as roverNamesLoader } from './components/RoverSearchForm';
+import PhotoGallery from './components/PhotoGallery';
 
 function PageLayout() {
   return (
     <>
       <Navbar />
-      <Outlet />
+      <Container className='py-4'>
+        <Outlet />
+      </Container>
     </>
   );
 }
@@ -18,23 +24,32 @@ function Home() {
   )
 }
 
-function RoverPhotos() {
-  return (
-    <p>photos</p>
-  )
-}
-
+const router = createBrowserRouter([
+  {
+    element: <PageLayout />,
+    children: [
+      {
+        path: "/",
+        element: <Home />
+      },
+      {
+        path: "rover-photos",
+        element: <RoverPhotos />,
+        loader: roverNamesLoader,
+        children: [
+          {
+            path: ":roverName",
+            element: <PhotoGallery />
+          }
+        ]
+      }
+    ]
+  }
+])
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route element={<PageLayout />}>
-          <Route path="/" element={<Home/>} />
-          <Route path="rover-photos" element={<RoverPhotos />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <RouterProvider router={router} />
   );
 }
 

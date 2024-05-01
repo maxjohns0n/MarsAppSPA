@@ -2,6 +2,16 @@ import axios from 'axios';
 
 const base_url = "http://localhost:8000";
 
+interface RoverInfoResponse {
+    id: number,
+    name: string,
+    status: string,
+    cameras: {
+        name: string,
+        full_name: string
+    }[]
+}
+
 interface RoverPhotoResponse {
     id: number,
     img_src: string,
@@ -13,16 +23,16 @@ function makeRequest(endpoint: string) {
     return axios.get(endpoint, { baseURL: base_url, timeout: 5000 });
 }
 
-async function getRoverNames(): Promise<string[]> {
+async function getRoverInfo(): Promise<RoverInfoResponse[]> {
     const rovers = await makeRequest("rovers");
-    return rovers.data.rovers.map((rover: { name: string }) => rover.name);
+    return rovers.data.rovers;
 }
 
-async function getRoverPhotos(roverName: string): Promise<RoverPhotoResponse[]> {
+async function getRoverPhotos(roverName: string, cameraType: string): Promise<RoverPhotoResponse[]> {
     console.log(`Fetching photos for ${roverName}`);
-    const photos = await makeRequest(`rovers/${roverName}/photos/fhaz`);
+    const photos = await makeRequest(`rovers/${roverName}/photos/${cameraType}`);
     return photos.data.photos;
 }
 
-export { getRoverNames, getRoverPhotos };
-export type { RoverPhotoResponse };
+export { getRoverInfo, getRoverPhotos };
+export type { RoverInfoResponse, RoverPhotoResponse };

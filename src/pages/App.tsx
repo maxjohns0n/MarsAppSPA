@@ -4,7 +4,7 @@ import './App.css';
 import Navbar from '../components/Navbar';
 import { Container } from 'react-bootstrap';
 import RoverPhotos from './RoverPhotos';
-import { getRoverNames } from '../MarsAPI';
+import { getRoverInfo } from '../MarsAPI';
 
 function PageLayout() {
   return (
@@ -34,7 +34,7 @@ const router = createBrowserRouter([
       {
         path: "rover-photos",
         element: <RoverPhotos />,
-        loader: getRoverNames
+        loader: getRoverInfo
       }
     ]
   }
